@@ -91,10 +91,35 @@ const fetchISSFlyOverTimes = function(coords, callback) {
       return;
     }
 
-    let flyOverTimes = JSON.parse(body).response;
-    callback(error, flyOverTimes);
+    let passTimes = JSON.parse(body).response;
+    callback(error, passTimes);
   })
 };
 
-module.exports = { fetchMyIP, fetchCoordsByIP, fetchISSFlyOverTimes };
+// Call functions in sequences
 
+const nextISSTimesForMyLocation = function (callback) {
+  fetchMyIP((error, ip) => {
+    if (error) {
+      console.log("Error: " , error);
+      return;
+    }
+    
+    fetchCoordsByIP(ip, (error, coords) => {
+      if (error) {
+        console.log("Error: " , error);
+        return;
+      }
+
+      fetchISSFlyOverTimes(coords, (error, passTimes) => {
+        if (error) {
+          console.log("Error: " , error);
+          return;
+        }
+        callback(error, passTimes);
+      })    
+    });
+  });
+};
+
+module.exports = { nextISSTimesForMyLocation };
