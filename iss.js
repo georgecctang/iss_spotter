@@ -43,7 +43,7 @@ const fetchMyIP = function(callback) {
  */
 
 const fetchCoordsByIP = function(ip, callback) {
-  request(`https://ipvigilante.com/${ip}`, (error, response, body) => {
+  request(`https://ipvigilante.com/json/${ip}`, (error, response, body) => {
     
     // Set error for invalid domain, user is offline, etc.
     if (error) {
